@@ -60,7 +60,23 @@ const listWithOneBlog = [
   }
 ]
 
+const blogWithEmptyLikes = {
+  title: 'This blog has an empty likes field',
+  author: 'president drumpf',
+  url: 'http://www.fakesite.com',
+  likes: null
+}
+
+const newPost = {
+  title: 'a new post',
+  author: 'president drumpf',
+  url: 'http://www.fakesite.com',
+  likes: 30
+}
+
 module.exports = {
   blogs,
-  listWithOneBlog
+  newPost,
+  listWithOneBlog,
+  blogWithEmptyLikes,
 }

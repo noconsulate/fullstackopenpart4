@@ -12,8 +12,7 @@ blogsRouter.get('/', (request, response) => {
 
 blogsRouter.post('/', (request, response) => {
   const blog = new Blog(request.body)
-  console.log('hello')
-
+  
   blog
     .save()
     .then(result => {
