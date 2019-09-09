@@ -1,10 +1,12 @@
 const Blog = require('../models/blogs')
 const app = require('../app')
 require('dotenv').config()
+const request = require('request')
 
 if (process.env.NODE_ENV === 'test') {
   const supertest = require('supertest')
   const api = supertest(app)
+  console.log('middleware test mode')
 } else {
   const api = app
 }
@@ -21,8 +23,6 @@ const errorHandler = (error, request, response, next) => {
       likes: 0
     })
     console.log(fixedBlog);
-    
-    api.post('api/blogs').send(fixedBlog)
   }
 }
 

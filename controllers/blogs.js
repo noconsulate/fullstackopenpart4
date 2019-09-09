@@ -12,28 +12,22 @@ blogsRouter.get('/', (request, response) => {
 
 blogsRouter.post('/', async (request, response, next) => {
   const body = request.body
-  const blog = new Blog({
-    authoer: body.author,
-    title: body.title,
-    url: body.url,
-    likes: body.likes
-  })
-  console.log('in post router');
+  const likes = body.likes == null? 0 : body.likes
   
+  const blog = new Blog({
+      authoer: body.author,
+      title: body.title,
+      url: body.url,
+      likes: likes
+    })
+
+
   try {
     const savedBlog = await blog.save()
     response.status(201).json(savedBlog.toJSON())
   } catch (exception) {
     next(exception)
   }
-
-  /*
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
-    */
 })
 
 module.exports = blogsRouter
