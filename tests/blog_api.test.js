@@ -42,9 +42,9 @@ test('new post results in correct number of posts', async () => {
 })
 
 test('a new note with empty likes value will be set to zero', async () => {
-  const newBlog = helper.blogWithEmptyLikes
+  const newBlog = testData.blogWithEmptyLikes
   const response = await api
-  .post('/api/notes')
+  .post('/api/blogs')
   .send(newBlog)
   
   console.log(response.body)
