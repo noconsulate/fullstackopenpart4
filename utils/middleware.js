@@ -12,18 +12,16 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 const errorHandler = (error, request, response, next) => {
- 
-  console.log(error.name, error.message, request.body)
+  console.log(error.name)
+  console.log(typeof error.message, error.message)
 
-  if (error.message === 'Blog validation failed: likes: Path `likes` is required.') {
-    const fixedBlog = new Blog({
-      title: request.body.title,
-      author: request.body.author,
-      url: request.body.url,
-      likes: 0
-    })
-    console.log(fixedBlog);
+  if (error.message.includes('Blog validation failed:')) {
+    console.log('if triggered')
+    return response.status(400).send({error: 'missing properites'})
   }
+  log('if not triggered')
+  return
+  
 }
 
 module.exports = {

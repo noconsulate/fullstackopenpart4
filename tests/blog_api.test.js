@@ -46,6 +46,17 @@ test('a new note with empty likes value will be set to zero', async () => {
   expect(response.body.likes).toBe(0)
 })
 
+test('url and title properties required, gives 400 bad request', async () => {
+  const badBlog = {
+    title: null,
+    url: null,
+    author: "pissy pants phd",
+    likes: 6000,
+  }
+
+  await api.post('/api/blogs').send(badBlog).expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
