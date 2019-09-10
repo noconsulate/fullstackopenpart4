@@ -11,25 +11,13 @@ blogsRouter.get('/', (request, response) => {
     })
 })
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
 blogsRouter.post('/', async (request, response, next) => {
-  console.log('in post')
   const body = request.body
   const likes = body.likes == null? 0 : body.likes
-  const token = getTokenFrom(request)
-  console.log(body)
 
   try {
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-    console.log(decodedToken)
-    if (!token || !decodedToken.id) {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
       return response.stats(404).json( { error: 'token missing or invalid'})
     }
 
@@ -52,12 +40,31 @@ blogsRouter.post('/', async (request, response, next) => {
 })
 
 blogsRouter.delete('/:id', async (request, response, next) => {
+  console.log('in delete route')
+  try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken) {
+      return response.status(404).json({ error: 'missing or invalid token'})
+    }
+    const blog = await Blog.findById(request.params.id)
+    console.log(blog, request.params.id)
+    if (blog.user.toString() === decodedToken.id.toString()) {
+      await Blog.findByIdAndRemove(request.params.id)
+      response.status(204).end()
+    } else {
+      response.status(401).json( { error: 'can\'t delete another usesr\'s post' })
+    }
+  } catch (exception) {
+    next(exception)
+  }
+
+  /*
   try {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
   } catch (exception) {
     next(exception)
-  }
+  }*/
 })
 
 blogsRouter.put('/:id', async (request, response, next) => {
