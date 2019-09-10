@@ -16,11 +16,10 @@ const errorHandler = (error, request, response, next) => {
   console.log(typeof error.message, error.message)
 
   if (error.message.includes('Blog validation failed:')) {
-    console.log('if triggered')
     return response.status(400).send({error: 'missing properites'})
   }
-  log('if not triggered')
-  return
+
+  nexet(error)
   
 }
 
